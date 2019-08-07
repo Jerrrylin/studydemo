@@ -1,4 +1,4 @@
-package main.java.com.jerrrylinalgorithm.demo.base.lurlinked;
+package com.jerrrylinalgorithm.demo.base.lurlinked;
 
 import lombok.Data;
 
@@ -38,6 +38,9 @@ public class LurLinked {
         thirdNode.setNext(fourthNode);
         MyNode fifthNode = lurLinked.insertOne(thirdNode, "e",null);
         fourthNode.setNext(fifthNode);
+        lurLinked.println(firstNode);
+        System.out.println("-----------------------------------");
+        lurLinked.addOnFirst(firstNode,"e");
         lurLinked.println(firstNode);
     }
 
@@ -92,9 +95,28 @@ public class LurLinked {
     void addOnFirst(MyNode firstNode,String data){
        MyNode currentNode = firstNode;
        while(currentNode!=null){
+           //当前节点包含要缓存的数据
            if(currentNode.data.equals(data)){
-               currentNode.getNext().setPre(currentNode.getPre());
-               currentNode.getPre().setNext(currentNode.getNext());
+               //如果是第一个节点
+               if(firstNode.getData().equals(data)){
+                   break;
+               }
+               //如果是最后一个节点包含数据，直接把该节点移到头部
+               if(currentNode.next==null){
+                   //设置原来倒数第二节点为现在的倒数第一节点，就是next为null
+                   currentNode.getPre().setPre(null);
+               }
+               //如果不是第一个节点包含的话 ,又不是第一节点，只能是中间
+               else if(currentNode!=firstNode){
+                   //获取原有前一节点和原有的后一节点，并使两者连接起来
+                   currentNode.getNext().setPre(currentNode.getPre());
+                   currentNode.getPre().setNext(currentNode.getNext());
+               }
+               //设置原来第一节点为现在第二节点
+               firstNode.setPre(currentNode);
+               //设置当前节点为第一节点
+               currentNode.setPre(null);
+               currentNode.setNext(firstNode);
                 break;
            }
            currentNode = currentNode.next;
